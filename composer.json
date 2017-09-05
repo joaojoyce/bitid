@@ -1,0 +1,14 @@
+{
+    "name": "joaojoyce/bitid",
+    "description": "A BitID implementation for Laravel",
+    "authors": [
+        {
+            "name": "João Joyce",
+            "email": "joao.joyce@netcabo.pt"
+        }
+    ],
+    "require": {
+        "mdanter/ecc": "^0.4.2",
+        "bitwasp/bitcoin": "^0.0.34"
+    }
+}
