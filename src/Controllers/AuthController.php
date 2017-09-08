@@ -1,10 +1,13 @@
 <?php namespace JoaoJoyce\BitId\Controllers;
 
-class AuthController
+use Illuminate\Routing\Controller as BaseController;
+
+
+class AuthController extends BaseController
 {
 
-    public function showSessionLink() {
-
+    public function showLoginPage() {
+        return view('bitid::login_page');
     }
 
     public function validateSession() {

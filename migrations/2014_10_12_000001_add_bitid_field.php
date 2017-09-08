@@ -13,10 +13,10 @@ class AddBitidField extends Migration
      */
     public function up()
     {
-        /*Schema::table('users', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             $table->string('bit_id',128);
             $table->index('bit_id');
-        });*/
+        });
     }
 
     /**

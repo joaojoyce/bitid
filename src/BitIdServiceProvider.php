@@ -13,6 +13,8 @@ class BitIdServiceProvider extends ServiceProvider
     {
         //Load migrations if needed.
         $this->loadMigrationsFrom(__DIR__.'/../migrations');
+        $this->loadViewsFrom(__DIR__.'/../views', 'bitid');
+        $this->loadRoutesFrom(__DIR__.'/../routes/routes.php');
 
     }
 
