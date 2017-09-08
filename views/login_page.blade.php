@@ -1,7 +1,9 @@
 <html>
 <body>
 
-<div>Here</div>
+<div>{{$nonce}}</div>
+
+
 
 </body>
 </html>
