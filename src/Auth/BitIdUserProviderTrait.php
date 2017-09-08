@@ -1,8 +1,8 @@
-<?php namespace joaojoyce\bitid\Auth;
+<?php namespace JoaoJoyce\BitId\Auth;
 
 use Illuminate\Contracts\Auth\Authenticatable;
 
-class BitIdUserProviderTriat
+class BitIdUserProviderTrait
 {
 
     /**

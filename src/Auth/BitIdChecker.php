@@ -1,4 +1,4 @@
-<?php namespace joaojoyce\bitid\Auth;
+<?php namespace JoaoJoyce\BitId\Auth;
 
 class BitIdChecker
 {
