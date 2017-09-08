@@ -10,7 +10,6 @@
     "require": {
         "mdanter/ecc": "^0.4.2",
         "bitwasp/bitcoin": "^0.0.34",
-        "aferrandini/phpqrcode": "1.0.1",
-        "tymon/jwt-auth": "^0.5.12"
+        "aferrandini/phpqrcode": "1.0.1"
     }
 }
