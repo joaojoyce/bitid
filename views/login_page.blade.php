@@ -1,8 +1,8 @@
 <html>
 <body>
 
-<div>{{$nonce}}</div>
-
+<div>{{$url}}</div>
+<img src="{{$img_url}}" />
 
 
 </body>
