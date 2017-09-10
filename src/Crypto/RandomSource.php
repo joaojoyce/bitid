@@ -1,6 +1,6 @@
-<?php namespace JoaoJoyce\BitId\Helpers;
+<?php namespace JoaoJoyce\BitId\Crypto;
 
-class Random
+class RandomSource
 {
 
     public static function getRandomString($length = 64) {
@@ -17,5 +17,6 @@ class Random
             return bin2hex(openssl_random_pseudo_bytes($length));
         }
     }
+
 
 }
