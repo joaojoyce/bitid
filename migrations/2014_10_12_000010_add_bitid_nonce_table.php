@@ -14,6 +14,7 @@ class AddBitidNonceTable extends Migration
     public function up()
     {
         Schema::create('nonces', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('nonce',128);
             $table->string('qr_code_name',128);
             $table->timestamps();

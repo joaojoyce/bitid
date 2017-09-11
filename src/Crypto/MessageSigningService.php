@@ -6,23 +6,36 @@ use BitWasp\Bitcoin\Bitcoin;
 use BitWasp\Bitcoin\Crypto\EcAdapter\EcSerializer;
 use BitWasp\Bitcoin\Crypto\EcAdapter\Serializer\Signature\CompactSignatureSerializerInterface;
 use BitWasp\Bitcoin\MessageSigner\MessageSigner;
+use BitWasp\Bitcoin\MessageSigner\SignedMessage;
 use BitWasp\Bitcoin\Serializer\MessageSigner\SignedMessageSerializer;
 use BitWasp\Buffertools\Buffer;
 
 class MessageSigningService
 {
 
-    public static function verifyMessageSignature($url, $signature, $public_key_address)
+    public static function verifyMessageSignature($signature, $public_key_address)
+    {
+        $signedMessage = self::getSignedMessageFromSignature($signature);
+        /** @var PayToPubKeyHashAddress $address */
+        $address = AddressFactory::fromString($public_key_address);
+
+        $message_signer = new MessageSigner(Bitcoin::getEcAdapter());
+        return $message_signer->verify($signedMessage,$address);
+    }
+
+    public static function getNonceFromSignature($signature) {
+        $signedMessage = self::getSignedMessageFromSignature($signature);
+        $message = $signedMessage->getMessage();
+        $parts = parse_url($message);
+        parse_str($parts['query'], $query);
+        return $query['x'];
+    }
+
+    private static function getSignedMessageFromSignature($signature)
     {
         $compactSigSerializer = EcSerializer::getSerializer(CompactSignatureSerializerInterface::class);
         $serializer = new SignedMessageSerializer($compactSigSerializer);
-        $signedMessage = $serializer->parse(Buffer::hex($signature)->getBinary());
-
-        $message_signer = new MessageSigner(Bitcoin::getEcAdapter());
-
-        /** @var PayToPubKeyHashAddress $address */
-        $address = AddressFactory::fromString($public_key_address);
-        return $message_signer->verify($signedMessage,$address) && $signedMessage->getMessage() == $url;
+        return $serializer->parse(Buffer::hex($signature)->getBinary());
     }
 
 }

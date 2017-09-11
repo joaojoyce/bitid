@@ -43,14 +43,15 @@ class AuthController extends BaseController
     public function verifySignature(Request $request) {
 
         $public_key = $request->input('public_key');
-        $nonce = $request->input('nonce');
         $signature = $request->input('signature');
-        $url = BitIdUrlHandler::getUrlFromNonce($nonce);
+        $nonce = MessageSigningService::getNonceFromSignature($signature);
 
-        if(!MessageSigningService::verifyMessageSignature($url,$signature,$public_key)) {
-            abort(403);
+        $nonce_model = Nonce::where('nonce','=',$nonce)->first();
+
+        if(!MessageSigningService::verifyMessageSignature($signature,$public_key) && $nonce_model) {
+
         } else {
-            echo "Signature OK!";
+
         }
 
     }
