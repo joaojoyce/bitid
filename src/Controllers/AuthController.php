@@ -21,12 +21,12 @@ class AuthController extends BaseController
         $this->qr_code = new QRCodeAdapter();
     }
 
-    public function showLoginPage() {
+    public function showLoginPage(Request $request) {
 
         $nonce = RandomSource::getRandomString(32);
         $url = BitIdUrlHandler::getUrlFromNonce($nonce);
 
-        session(['nonce' => $nonce]);
+        $request->session()->put('nonce', $nonce);
 
         $img_url = $this->qr_code->getQRCode($url);
 
@@ -60,23 +60,27 @@ class AuthController extends BaseController
             $nonce_model->verified = true;
             $nonce_model->user = $user->id;
             $nonce_model->save();
+            return "OK";
 
         } else {
-
+            return "NOP!";
         }
 
     }
 
-    public function check() {
-        $nonce = session('nonce');
+    public function check(Request $request) {
 
-        echo $nonce;die();
+        $nonce = $request->session()->get('nonce');
 
-        Nonce::where('nonce','=',$nonce)->first();
+
+        $nonce= Nonce::where('nonce','=',$nonce)->first();
 
         if($nonce && $nonce->user && $nonce->verified) {
-            $user = Auth::loginUsingId($nonce->user, true);
+            $user = \Auth::loginUsingId($nonce->user, true);
             if($user) {
+                //Clear tokens
+                $nonce->delete();
+                $request->session()->put("nonce",null);
                 return "Logged in!!";
             }
         }

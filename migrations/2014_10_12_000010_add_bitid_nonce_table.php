@@ -18,7 +18,7 @@ class AddBitidNonceTable extends Migration
             $table->string('nonce',128);
             $table->string('qr_code_name',128);
             $table->boolean('verified')->default(0);
-            $table->integer('user');
+            $table->integer('user')->nullable();
             $table->timestamps();
             $table->index('nonce');
         });

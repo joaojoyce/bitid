@@ -13,9 +13,12 @@ class AddBitidField extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::create('users', function (Blueprint $table) {
+            $table->increments('id');
             $table->string('bit_id',128);
             $table->index('bit_id');
+            $table->rememberToken();
+            $table->timestamps();
         });
     }
 
@@ -27,5 +30,6 @@ class AddBitidField extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
+
     }
 }
