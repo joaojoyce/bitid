@@ -1,5 +1,6 @@
 <?php namespace JoaoJoyce\BitId\Controllers;
 
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
@@ -48,7 +49,17 @@ class AuthController extends BaseController
 
         $nonce_model = Nonce::where('nonce','=',$nonce)->first();
 
-        if(!MessageSigningService::verifyMessageSignature($signature,$public_key) && $nonce_model) {
+        if(MessageSigningService::verifyMessageSignature($signature,$public_key) && $nonce_model) {
+
+            $user = User::where('bit_id','=',$public_key)->first();
+            if(!$user) {
+                $user = new User();
+                $user->bit_id=$public_key;
+                $user->save();
+            }
+            $nonce_model->verified = true;
+            $nonce_model->user = $user->id;
+            $nonce_model->save();
 
         } else {
 
@@ -57,7 +68,19 @@ class AuthController extends BaseController
     }
 
     public function check() {
+        $nonce = session('nonce');
 
+        echo $nonce;die();
+
+        Nonce::where('nonce','=',$nonce)->first();
+
+        if($nonce && $nonce->user && $nonce->verified) {
+            $user = Auth::loginUsingId($nonce->user, true);
+            if($user) {
+                return "Logged in!!";
+            }
+        }
+        return "Not logged in";
     }
 
 }
