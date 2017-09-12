@@ -4,7 +4,9 @@ class BitIdUrlHandler
 {
 
     public static function getUrlFromNonce($nonce) {
-        return config('bitid.url.scheme') .config('bitid.url.url') . '/' . config('bitid.url.callback') . '?x=' . $nonce;
+        return config('bitid.url.scheme') .config('bitid.url.url') . '/' . config('bitid.url.callback') . '?x=' . $nonce . '&u=1';
     }
+
+
 
 }

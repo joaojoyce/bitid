@@ -43,13 +43,16 @@ class AuthController extends BaseController
 
     public function verifySignature(Request $request) {
 
-        $public_key = $request->input('public_key');
+        \Log::info('Log Info:', $request->all());
+
+        $public_key = $request->input('address');
         $signature = $request->input('signature');
-        $nonce = MessageSigningService::getNonceFromSignature($signature);
+        $uri = $request->input('uri');
+        $nonce = MessageSigningService::getNonceFromUri($uri);
 
         $nonce_model = Nonce::where('nonce','=',$nonce)->first();
 
-        if(MessageSigningService::verifyMessageSignature($signature,$public_key) && $nonce_model) {
+        if(MessageSigningService::verifyMessageSignature($signature,$public_key,$uri) && $nonce_model) {
 
             $user = User::where('bit_id','=',$public_key)->first();
             if(!$user) {
@@ -57,7 +60,6 @@ class AuthController extends BaseController
                 $user->bit_id=$public_key;
                 $user->save();
             }
-            $nonce_model->verified = true;
             $nonce_model->user = $user->id;
             $nonce_model->save();
             return "OK";
@@ -72,19 +74,18 @@ class AuthController extends BaseController
 
         $nonce = $request->session()->get('nonce');
 
-
         $nonce= Nonce::where('nonce','=',$nonce)->first();
 
-        if($nonce && $nonce->user && $nonce->verified) {
+        if($nonce && $nonce->user) {
             $user = \Auth::loginUsingId($nonce->user, true);
             if($user) {
                 //Clear tokens
                 $nonce->delete();
                 $request->session()->put("nonce",null);
-                return "Logged in!!";
+                return "OK";
             }
         }
-        return "Not logged in";
+        abort(403);
     }
 
 }

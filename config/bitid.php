@@ -2,7 +2,7 @@
 
 return [
     'url' => [
-        'scheme' => env('BITID_SCHEME','bitid:'),
+        'scheme' => env('BITID_SCHEME','bitid://'),
         'callback' => env('BITID_CALLBACK','authenticate'),
         'url' => env('BITID_URL','localhost')
     ],
